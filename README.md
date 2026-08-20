@@ -15,6 +15,8 @@
 - 修复画面自适应显示
 - 接入后台事件上报
 - 启用 SQLite 后台数据
+- 游戏源码固定到指定 commit，减少供应链漂移风险
+- 后台必须使用 `ADMIN_TOKEN`，没有默认密码
 
 ## Render 部署
 
@@ -31,11 +33,17 @@ Plan: Free
 
 ```text
 APP_ENV=commercial-test
-ADMIN_PASSWORD=你的强密码
-ADMIN_TOKEN=同上
+ADMIN_TOKEN=至少16位的强密码/随机字符串
 DATA_DIR=/tmp/fishgame-data
 ```
 
+部署完成后访问：
+
+- `https://你的-render域名/game/` 游戏端
+- `https://你的-render域名/admin` 后台
+
+后台登录时填写你在 Render 设置的 `ADMIN_TOKEN`。
+
 ## 合规边界
 
-当前仅做娱乐币商业测试，不接入真钱充值、提现或博彩结算。
+当前仅做娱乐币商业测试，不接入真钱充值、提现或博彩结算。Render Free 的 `/tmp` 数据会随实例重启丢失，只适合测试，不适合正式生产。
