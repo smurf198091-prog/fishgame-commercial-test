@@ -8,8 +8,6 @@ services:
     envVars:
       - key: APP_ENV
         value: commercial-test
-      - key: ADMIN_PASSWORD
-        generateValue: true
       - key: ADMIN_TOKEN
         generateValue: true
       - key: DATA_DIR
