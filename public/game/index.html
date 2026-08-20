@@ -1,0 +1,65 @@
+<!doctype html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<link rel="apple-touch-icon" href="images/icon.png"/>
+<link rel="apple-touch-startup-image" href="images/icon.png" />
+
+<style type="text/css">
+body, div, canvas {
+    image-rendering: optimizeSpeed;
+    -webkit-image-rendering: optimizeSpeed;
+    -webkit-interpolation-mode: nearest-neighbor;
+}
+html, body { width:100%; height:100%; padding:0; margin:0; overflow:hidden; background:#000; font-size:12px; }
+#outer { position:fixed; inset:0; overflow:hidden; background:#000; display:flex; align-items:center; justify-content:center; }
+#middle { position:relative; width:980px; height:545px; transform-origin:center center; }
+#container { position:relative; width:980px; height:545px; margin:0 auto; overflow:hidden; background:#000; }
+#msg { position:absolute; left:0; top:0; color:#fff; z-index:10; }
+#fps { position:absolute; top:0; left:0; color:#fff; z-index:20; }
+#fitTip { position:fixed; right:10px; top:8px; color:rgba(255,255,255,.75); font:12px Arial; z-index:30; background:rgba(0,0,0,.35); padding:4px 7px; border-radius:8px; }
+</style>
+
+<title>Game Bắn Cá - Full View</title>
+
+<script type="text/javascript" src="js/quark.base-1.0.0.alpha.min.js"></script>
+<script type="text/javascript" src="src/R.js"></script>
+<script type="text/javascript" src="src/Utils.js"></script>
+<script type="text/javascript" src="src/fishjoy.js"></script>
+<script type="text/javascript" src="src/FishManager.js"></script>
+<script type="text/javascript" src="src/FishGroup.js"></script>
+<script type="text/javascript" src="src/views/Fish.js"></script>
+<script type="text/javascript" src="src/views/Cannon.js"></script>
+<script type="text/javascript" src="src/views/Bullet.js"></script>
+<script type="text/javascript" src="src/views/Num.js"></script>
+<script type="text/javascript" src="src/views/Player.js"></script>
+<script>
+(function(){
+  function fitGame(){
+    var designW = 980, designH = 545;
+    var scale = Math.min(window.innerWidth / designW, window.innerHeight / designH);
+    var middle = document.getElementById('middle');
+    if(middle){ middle.style.transform = 'scale(' + scale + ')'; }
+    var tip = document.getElementById('fitTip');
+    if(tip){ tip.textContent = 'fit ' + Math.round(scale * 100) + '%'; }
+  }
+  window.addEventListener('resize', fitGame);
+  window.addEventListener('orientationchange', fitGame);
+  window.addEventListener('load', fitGame);
+})();
+</script>
+</head>
+
+<body>
+<div id="outer">
+  <div id="middle">
+    <div id="container"></div>
+    <div id="msg"></div>
+  </div>
+</div>
+<div id="fps"></div>
+<div id="fitTip">fit</div>
+</body>
+</html>

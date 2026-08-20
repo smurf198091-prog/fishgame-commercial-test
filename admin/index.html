@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>捕鱼商业测试后台</title>
+  <style>
+    body{margin:0;background:#07111f;color:#eaf6ff;font-family:system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:28px 18px}.muted{color:#9db9d3}.card{background:#0b1d34;border:1px solid #24476f;border-radius:18px;padding:18px;margin:14px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.num{font-size:30px;font-weight:900;color:#ffd66b}button,a.btn,input{border:0;border-radius:12px;padding:10px 14px;font-weight:800}button,a.btn{background:#37a2ff;color:#00182d;text-decoration:none;cursor:pointer}.danger{background:#832338!important;color:#fff!important}input{background:#061225;color:#eaf6ff;border:1px solid #315781;min-width:320px}table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid #193451;padding:9px;text-align:left;font-size:13px}pre{white-space:pre-wrap;max-height:400px;overflow:auto;background:#030812;padding:14px;border-radius:14px;border:1px solid #193451}.ok{color:#72ffb6}.bar{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>🎣 捕鱼商业测试后台</h1>
+    <p class="muted">Vercel 免费测试版：完整 H5 游戏 + Serverless 后台 + 娱乐币运营数据。默认禁用真钱充值/提现。</p>
+    <div id="login" class="card"><h2>后台登录</h2><input id="pwd" type="password" placeholder="ADMIN_TOKEN"><button onclick="loginNow()">登录</button></div>
+    <div id="app" style="display:none">
+      <div class="bar"><a class="btn" href="/game/" target="_blank">打开游戏端</a><button onclick="load()">刷新</button><button class="danger" onclick="resetAll()">清空测试数据</button></div>
+      <div class="grid"><div class="card"><div class="muted">状态</div><div class="num ok" id="status">--</div></div><div class="card"><div class="muted">玩家数</div><div class="num" id="players">0</div></div><div class="card"><div class="muted">发炮</div><div class="num" id="fires">0</div></div><div class="card"><div class="muted">捕获</div><div class="num" id="captures">0</div></div><div class="card"><div class="muted">事件</div><div class="num" id="eventsCount">0</div></div></div>
+      <div class="card"><h2>玩家账户</h2><div id="playerTable"></div></div>
+      <div class="card"><h2>最近事件</h2><pre id="events">loading...</pre></div></div>
+  </div>
+  <script>
+    let token=localStorage.getItem('adminToken')||'';
+    function headers(){return {'X-Admin-Token':token,'Content-Type':'application/json'}}
+    function loginNow(){token=pwd.value;localStorage.setItem('adminToken',token);login.style.display='none';app.style.display='block';load()}
+    async function api(p,o={}){o.headers=Object.assign(headers(),o.headers||{});const r=await fetch(p,o);if(r.status===401){localStorage.removeItem('adminToken');alert('Token 不对或未配置');location.reload()}return await r.json()}
+    if(token){login.style.display='none';app.style.display='block';load()}
+    async function load(){const s=await api('/api/admin/state');status.textContent=s.status;players.textContent=s.summary.players;fires.textContent=s.summary.fires;captures.textContent=s.summary.captures;eventsCount.textContent=s.summary.events;playerTable.innerHTML='<table><tr><th>player_id</th><th>coin</th><th>fires</th><th>captures</th><th>updated</th></tr>'+s.players.map(p=>`<tr><td>${p.player_id}</td><td>${p.coin}</td><td>${p.fires}</td><td>${p.captures}</td><td>${new Date(p.updated_at).toLocaleString()}</td></tr>`).join('')+'</table>';events.textContent=JSON.stringify(s.events,null,2)}
+    async function resetAll(){if(confirm('清空测试数据？')){await api('/api/admin/reset',{method:'POST'});load()}}
+    setInterval(()=>{if(app.style.display!=='none')load()},5000)
+  </script>
+</body>
+</html>
