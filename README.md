@@ -1,40 +1,22 @@
-# Fishgame Commercial Test - Vercel Edition
+# Fishgame Commercial Test - GitHub Pages Edition
 
-海外免费商业测试部署包，适配 Vercel Hobby。
+公网免费测试版本，适配 GitHub Pages。
 
-## 路径
+## 访问路径
 
+- `/` 入口页
 - `/game/` 游戏端
-- `/admin/` 商业测试后台
-- `/api/health` 健康检查
+- `/admin/` 测试后台
 
-## 架构
+## 当前能力
 
-- `public/game/`：完整 H5 捕鱼游戏静态文件
-- `api/index.js`：Vercel Serverless API
-- `admin/index.html`：商业测试后台
-
-## Vercel 部署
-
-导入本仓库后使用默认设置即可。
-
-环境变量：
-
-```text
-ADMIN_TOKEN=至少16位的强密码/随机字符串
-APP_ENV=commercial-test
-```
-
-部署完成后访问：
-
-- 游戏端：`https://你的域名/game/`
-- 后台：`https://你的域名/admin/`
-
-后台登录填写 `ADMIN_TOKEN`。
+- 完整 H5 捕鱼游戏静态文件
+- 游戏画面自适应
+- 测试后台页面
 
 ## 注意
 
-Vercel Serverless 的临时数据不保证长期保存。本版本只用于商业测试和演示，不用于正式运营。
+GitHub Pages 是静态托管，没有云端数据库和真正服务端。当前后台只适合演示。后续如果需要真实商业后台，可以再接 Cloudflare Workers / Supabase。
 
 ## 合规边界
 
