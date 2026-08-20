@@ -1,4 +1,4 @@
-﻿
+
 (function(){
 
 window.onload = function()
@@ -87,7 +87,7 @@ game.load = function(container)
 	var imgLoader = new Q.ImageLoader();
 	imgLoader.addEventListener("loaded", Q.delegate(this.onLoadLoaded, this));
 	imgLoader.addEventListener("complete", Q.delegate(this.onLoadComplete, this));
-	imgLoader.load(ns.R.sources);
+	imgLoader.load(ns.R.sources);`n`t// pagesLoadFallback: on some mobile webviews image onload can hang forever.`n`tvar self = this;`n`tsetTimeout(function(){ if(self.loader){ try{ self.onLoadComplete({target: imgLoader}); }catch(e){ console.log(e); } } }, 12000);
 };
 
 game.onLoadLoaded = function(e)
