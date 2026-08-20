@@ -1,5 +1,5 @@
 <!doctype html>
-<head>
+<head>`n<script id="mobileGitHubPagesFix">`n(function(){`n  // GitHub Pages mobile compatibility: always resolve assets from this folder.`n  var base=document.createElement("base");`n  base.href = location.pathname.replace(/[^\/]*$/, "");`n  document.currentScript && document.currentScript.after(base);`n})();`n</script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,6 +50,31 @@ html, body { width:100%; height:100%; padding:0; margin:0; overflow:hidden; back
   window.addEventListener('load', fitGame);
 })();
 </script>
+<style id="githubPagesMobilePatch">
+html,body{position:fixed;inset:0;width:100vw;height:100dvh;min-height:100vh;overflow:hidden;background:#000;touch-action:none;}
+#outer{position:fixed!important;left:0!important;top:0!important;right:0!important;bottom:0!important;width:100vw!important;height:100dvh!important;min-height:100vh!important;overflow:hidden!important;background:#000!important;display:flex!important;align-items:center!important;justify-content:center!important;}
+#middle{position:relative!important;width:980px!important;height:545px!important;transform-origin:center center!important;}
+#container{position:relative!important;width:980px!important;height:545px!important;overflow:hidden!important;background:#000!important;}
+#fitTip{display:none!important;}
+canvas{max-width:none!important;max-height:none!important;}
+</style>
+<script id="githubPagesMobilePatchScript">
+(function(){
+  function fitGame(){
+    var designW=980, designH=545;
+    var vw=window.innerWidth || document.documentElement.clientWidth || screen.width;
+    var vh=window.innerHeight || document.documentElement.clientHeight || screen.height;
+    var scale=Math.min(vw/designW, vh/designH);
+    var middle=document.getElementById('middle');
+    if(middle){middle.style.transform='scale('+scale+')';}
+  }
+  function wake(){setTimeout(fitGame,0);setTimeout(fitGame,300);setTimeout(fitGame,1000);}
+  window.addEventListener('resize',wake,{passive:true});
+  window.addEventListener('orientationchange',wake,{passive:true});
+  window.addEventListener('load',wake,{passive:true});
+  document.addEventListener('touchmove',function(e){e.preventDefault();},{passive:false});
+})();
+</script>
 </head>
 
 <body>
@@ -63,3 +88,4 @@ html, body { width:100%; height:100%; padding:0; margin:0; overflow:hidden; back
 <div id="fitTip">fit</div>
 </body>
 </html>
+
