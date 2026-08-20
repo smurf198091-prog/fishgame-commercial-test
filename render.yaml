@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: fishgame-commercial-test
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    envVars:
+      - key: APP_ENV
+        value: commercial-test
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: ADMIN_TOKEN
+        generateValue: true
+      - key: DATA_DIR
+        value: /tmp/fishgame-data
