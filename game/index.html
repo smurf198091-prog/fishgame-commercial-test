@@ -24,10 +24,10 @@ html, body { width:100%; height:100%; padding:0; margin:0; overflow:hidden; back
 
 <title>Game Bắn Cá - Full View</title>
 
-<script type="text/javascript" src="js/quark.base-1.0.0.alpha.min.js?v=9"></script>
-<script type="text/javascript" src="src/R.js?v=9"></script>
+<script type="text/javascript" src="js/quark.base-1.0.0.alpha.min.js?v=10"></script>
+<script type="text/javascript" src="src/R.js?v=10"></script>
 <script type="text/javascript" src="src/Utils.js"></script>
-<script type="text/javascript" src="src/fishjoy.js?v=9"></script>
+<script type="text/javascript" src="src/fishjoy.js?v=10"></script>
 <script type="text/javascript" src="src/FishManager.js"></script>
 <script type="text/javascript" src="src/FishGroup.js"></script>
 <script type="text/javascript" src="src/views/Fish.js"></script>
@@ -126,8 +126,67 @@ html,body{position:fixed;inset:0;width:100vw;height:100dvh;min-height:100vh;marg
 </div>
 <div id="fps"></div>
 <div id="fitTip" style="display:none">fit</div>
+<script id="mobileTouchFireV10">
+(function(){
+  var DESIGN_W = 980, DESIGN_H = 545;
+  var lastFire = 0;
+  function mode(){
+    var q = new URLSearchParams(location.search);
+    var m = q.get('orient') || localStorage.getItem('fishgame-orient') || 'auto';
+    if(m === 'auto') return window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
+    return m === 'portrait' ? 'portrait' : 'landscape';
+  }
+  function toGamePoint(clientX, clientY){
+    var vw = window.innerWidth || document.documentElement.clientWidth || screen.width;
+    var vh = window.innerHeight || document.documentElement.clientHeight || screen.height;
+    var dx = clientX - vw / 2;
+    var dy = clientY - vh / 2;
+    if(mode() === 'portrait'){
+      var s = Math.min(vw / DESIGN_H, vh / DESIGN_W);
+      return {x: dy / s + DESIGN_W / 2, y: -dx / s + DESIGN_H / 2};
+    }else{
+      var s2 = Math.min(vw / DESIGN_W, vh / DESIGN_H);
+      return {x: dx / s2 + DESIGN_W / 2, y: dy / s2 + DESIGN_H / 2};
+    }
+  }
+  function canFireTarget(el){
+    if(!el) return true;
+    if(el.id === 'rotateBtn') return false;
+    if(el.tagName === 'BUTTON') return false;
+    return true;
+  }
+  function fireAt(clientX, clientY, target){
+    if(!canFireTarget(target)) return;
+    var g = window.fish && window.fish.game;
+    if(!g || !g.player || typeof g.player.fire !== 'function') return;
+    var now = Date.now();
+    if(now - lastFire < 90) return;
+    var p = toGamePoint(clientX, clientY);
+    if(p.x < 0 || p.y < 0 || p.x > DESIGN_W || p.y > DESIGN_H) return;
+    lastFire = now;
+    try{
+      g.fireCount = g.fireInterval || 0;
+      g.player.fire({x:p.x, y:p.y});
+    }catch(e){ console.log('touch fire failed', e); }
+  }
+  document.addEventListener('touchstart', function(e){
+    if(!e.touches || !e.touches.length) return;
+    var t = e.touches[0];
+    fireAt(t.clientX, t.clientY, e.target);
+    if(e.target && e.target.id !== 'rotateBtn') e.preventDefault();
+  }, {passive:false, capture:true});
+  document.addEventListener('touchmove', function(e){
+    if(!e.touches || !e.touches.length) return;
+    var t = e.touches[0];
+    fireAt(t.clientX, t.clientY, e.target);
+    if(e.target && e.target.id !== 'rotateBtn') e.preventDefault();
+  }, {passive:false, capture:true});
+  document.addEventListener('mousedown', function(e){ fireAt(e.clientX, e.clientY, e.target); }, true);
+})();
+</script>
 </body>
 </html>
+
 
 
 
