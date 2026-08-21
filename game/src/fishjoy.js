@@ -90,7 +90,7 @@ game.load = function(container)
 	imgLoader.load(ns.R.sources);
 	// pagesLoadFallback: on some mobile webviews image onload can hang forever.
 	var self = this;
-	setTimeout(function(){ if(self.loader){ try{ self.onLoadComplete({target: imgLoader}); }catch(e){ console.log(e); } } }, 12000);
+	setTimeout(function(){ if(self.loader){ try{ self.onLoadComplete({target: imgLoader, images: imgLoader._images || {}}); }catch(e){ console.log(e); } } }, 15000);
 };
 
 game.onLoadLoaded = function(e)
@@ -268,4 +268,5 @@ game.hideNavBar = function()
 };
 
 })();
+
 
