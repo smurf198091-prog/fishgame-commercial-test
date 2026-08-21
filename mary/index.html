@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>小玛丽 - 娱乐币演示版</title>
+  <style>
+    :root{--bg:#120822;--card:#20123b;--gold:#ffd66b;--pink:#ff5bd7;--cyan:#48e5ff;--green:#72ffb6}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at top,#432176,#120822 58%,#05020a);color:#fff;font-family:system-ui,-apple-system,Segoe UI,sans-serif;touch-action:manipulation}.wrap{max-width:980px;margin:0 auto;padding:18px 12px 28px}.top{display:flex;align-items:center;justify-content:space-between;gap:10px}.brand{font-size:28px;font-weight:1000;letter-spacing:.04em}.pill{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:8px 12px;color:#cbd7ff}.notice{margin:12px 0;padding:10px 12px;border:1px solid rgba(255,214,107,.35);background:rgba(255,214,107,.1);border-radius:14px;color:#ffe9a5;font-size:13px}.machine{position:relative;margin:14px auto 0;max-width:760px;aspect-ratio:1/1;border-radius:34px;padding:14px;background:linear-gradient(145deg,#6c2db7,#251044 45%,#120822);box-shadow:0 18px 60px rgba(0,0,0,.45),inset 0 0 0 3px rgba(255,255,255,.08)}.grid{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);gap:8px;height:100%}.cell{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 -8px 18px rgba(0,0,0,.18);font-weight:900;text-align:center;min-width:0}.cell .icon{font-size:clamp(20px,6vw,44px);line-height:1}.cell .mul{font-size:clamp(10px,2.4vw,15px);color:#ffe9a5}.cell.active{background:linear-gradient(180deg,#fff6a4,#ffb703);color:#2c1300;box-shadow:0 0 18px #ffe66d,0 0 38px rgba(255,214,107,.75),inset 0 -8px 18px rgba(139,74,0,.25);transform:scale(1.04)}.center{grid-column:2/5;grid-row:2/5;border-radius:26px;background:radial-gradient(circle at top,#3b1d69,#10071e);border:1px solid rgba(255,255,255,.14);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:14px}.score{font-size:clamp(24px,7vw,54px);font-weight:1000;color:var(--gold);text-shadow:0 0 18px rgba(255,214,107,.45)}.msg{min-height:24px;color:#e7dcff}.controls{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:760px;margin:14px auto}.btn{border:0;border-radius:16px;padding:13px 8px;font-weight:1000;font-size:16px;color:#120822;background:linear-gradient(180deg,#6ff0ff,#2ea8ff);box-shadow:0 8px 18px rgba(0,0,0,.25)}.btn.primary{background:linear-gradient(180deg,#ffe66d,#ff9f1c)}.btn.danger{background:linear-gradient(180deg,#ff8fb9,#ff477e)}.btn:disabled{filter:grayscale(1);opacity:.55}.panel{max-width:760px;margin:12px auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.card{background:rgba(11,15,35,.72);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:14px}.label{color:#aebcf1;font-size:13px}.value{font-size:24px;font-weight:1000;color:#fff}.history{max-height:180px;overflow:auto;font-size:13px;color:#d7dfff}.links{max-width:760px;margin:10px auto;display:flex;gap:10px;flex-wrap:wrap}.link{color:#00182d;background:#72ffb6;text-decoration:none;font-weight:900;border-radius:999px;padding:9px 12px}@media (max-width:560px){.wrap{padding:10px 8px}.machine{border-radius:22px;padding:8px}.grid{gap:5px}.cell{border-radius:12px}.controls{grid-template-columns:repeat(2,1fr)}.brand{font-size:22px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top"><div class="brand">🎰 小玛丽</div><div class="pill">娱乐币演示版 V1</div></div>
+    <div class="notice">合规声明：本游戏仅用于海外娱乐币技术演示。游戏币无现金价值，不支持充值、提现、兑换、转让、代理、返佣、抽水或线下结算。</div>
+    <div class="machine">
+      <div class="grid" id="grid"><div class="center"><div class="label">娱乐币余额</div><div class="score" id="coins">10000</div><div class="msg" id="msg">选择倍率后开始</div></div></div>
+    </div>
+    <div class="controls">
+      <button class="btn" onclick="setBet(10)">押 10</button>
+      <button class="btn" onclick="setBet(50)">押 50</button>
+      <button class="btn" onclick="setBet(100)">押 100</button>
+      <button class="btn primary" id="spinBtn" onclick="spin()">开始</button>
+      <button class="btn" onclick="autoDemo()">自动演示</button>
+      <button class="btn danger" onclick="resetGame()">重置</button>
+      <button class="btn" onclick="toggleSound()" id="soundBtn">音效 开</button>
+      <button class="btn" onclick="location.href='../'">返回大厅</button>
+    </div>
+    <div class="panel">
+      <div class="card"><div class="label">当前押注</div><div class="value" id="bet">10</div></div>
+      <div class="card"><div class="label">最近结果</div><div class="value" id="lastWin">0</div></div>
+      <div class="card"><div class="label">累计游玩</div><div class="value" id="rounds">0</div></div>
+      <div class="card"><div class="label">模式</div><div class="value">体验币</div></div>
+    </div>
+    <div class="card" style="max-width:760px;margin:12px auto"><div class="label">记录</div><div class="history" id="history"></div></div>
+    <div class="links"><a class="link" href="../game.html">捕鱼</a><a class="link" href="../admin/">后台</a><a class="link" href="../">大厅</a></div>
+  </div>
+<script>
+const symbols=[
+  ['🍒','樱桃',2],['🍋','柠檬',3],['🍉','西瓜',5],['🔔','铃铛',8],['⭐','星星',10],
+  ['BAR','BAR',15],['7️⃣','幸运7',25],['💎','钻石',40],['🍊','橘子',4],['🍇','葡萄',6],
+  ['🍎','苹果',3],['👑','皇冠',30],['🍒','樱桃',2],['🍋','柠檬',3],['🎁','奖励',12],['⭐','星星',10]
+];
+const ring=[0,1,2,3,4,9,14,19,24,23,22,21,20,15,10,5];
+let state=JSON.parse(localStorage.getItem('maryState')||'{"coins":10000,"bet":10,"rounds":0,"history":[],"sound":true}');
+let pos=0, spinning=false, autoTimer=null;
+function save(){localStorage.setItem('maryState',JSON.stringify(state))}
+function build(){const grid=document.getElementById('grid'); for(let i=0;i<25;i++){ if(i===6){i=8;continue} if(i===11){i=13;continue} if(i===16){i=18;continue} const c=document.createElement('div'); c.className='cell'; c.id='cell'+i; const idx=ring.indexOf(i); const s=symbols[idx>=0?idx:0]; c.innerHTML='<div class="icon">'+s[0]+'</div><div>'+s[1]+'</div><div class="mul">x'+s[2]+'</div>'; grid.appendChild(c);} render();}
+function render(){coins.textContent=state.coins; bet.textContent=state.bet; rounds.textContent=state.rounds; soundBtn.textContent='音效 '+(state.sound?'开':'关'); history.innerHTML=(state.history||[]).slice(-30).reverse().map(x=>'第 '+x.round+' 局：'+x.name+'，收益 '+x.win).join('<br>')||'暂无记录';}
+function setBet(n){if(spinning)return; state.bet=n; save(); render(); msg.textContent='当前押注 '+n;}
+function beep(freq=520,dur=45){if(!state.sound)return; try{const ac=new (window.AudioContext||window.webkitAudioContext)(); const o=ac.createOscillator(); const g=ac.createGain(); o.frequency.value=freq;o.connect(g);g.connect(ac.destination);g.gain.value=.045;o.start();setTimeout(()=>{o.stop();ac.close()},dur)}catch(e){}}
+function clearActive(){document.querySelectorAll('.cell.active').forEach(e=>e.classList.remove('active'))}
+function light(i){clearActive(); const cell=document.getElementById('cell'+ring[i%ring.length]); if(cell)cell.classList.add('active')}
+function spin(){if(spinning)return; if(state.coins<state.bet){msg.textContent='娱乐币不足，请重置演示';return} spinning=true; spinBtn.disabled=true; state.coins-=state.bet; let steps=28+Math.floor(Math.random()*32); let delay=34; let count=0; msg.textContent='转动中...'; const tick=()=>{pos=(pos+1)%ring.length; light(pos); beep(420+pos*18,25); count++; if(count<steps){delay+=count>steps*.55?14:2; setTimeout(tick,delay)}else{finish(pos)}}; tick(); render(); save();}
+function finish(i){const s=symbols[i]; let win=0; if(Math.random()<0.68) win=state.bet*s[2]; state.coins+=win; state.rounds++; state.history=state.history||[]; state.history.push({round:state.rounds,name:s[1]+' x'+s[2],win}); if(state.history.length>80)state.history=state.history.slice(-80); lastWin.textContent=win; msg.textContent=win>0?'命中 '+s[1]+'，获得 '+win+' 娱乐币':'未命中，继续体验'; beep(win>0?880:180,160); spinning=false; spinBtn.disabled=false; render(); save();}
+function resetGame(){if(confirm('重置本地娱乐币演示数据？')){state={coins:10000,bet:10,rounds:0,history:[],sound:state.sound}; save(); lastWin.textContent=0; msg.textContent='已重置'; render();}}
+function toggleSound(){state.sound=!state.sound; save(); render();}
+function autoDemo(){if(autoTimer){clearInterval(autoTimer);autoTimer=null;msg.textContent='自动演示已停止';return} msg.textContent='自动演示中，再点一次停止'; autoTimer=setInterval(()=>{if(!spinning)spin()},1800)}
+build();
+</script>
+</body>
+</html>
