@@ -33,17 +33,10 @@ game.load = function(container)
 	if(params.fps) this.fps = params.fps;
 	this.fireInterval = this.fps*0.5;
 	
-	if(Q.isIpod || Q.isIphone)
-	{
-		this.width = 980;
-		this.height = 545;
-		Q.addMeta({name:"viewport", content:"user-scalable=no"});
-	}else
-	{		
-		Q.addMeta({name:"viewport", content:"user-scalable=no, initial-scale=1.0, minimum-scale=1, maximum-scale=1"});
-		this.width = Math.min(1024, window.innerWidth);
-		this.height = Math.min(768, window.innerHeight);
-	}
+	// GitHub Pages mobile patch: keep original landscape coordinate system.
+	this.width = 980;
+	this.height = 545;
+	Q.addMeta({name:"viewport", content:"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"});
 
 	if(params.width) this.width = Number(params.width) || this.width;
 	if(params.height) this.height = Number(params.height) || this.height;
@@ -268,6 +261,7 @@ game.hideNavBar = function()
 };
 
 })();
+
 
 
 
