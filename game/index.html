@@ -24,10 +24,10 @@ html, body { width:100%; height:100%; padding:0; margin:0; overflow:hidden; back
 
 <title>Game Bắn Cá - Full View</title>
 
-<script type="text/javascript" src="js/quark.base-1.0.0.alpha.min.js?v=6"></script>
-<script type="text/javascript" src="src/R.js?v=6"></script>
+<script type="text/javascript" src="js/quark.base-1.0.0.alpha.min.js?v=7"></script>
+<script type="text/javascript" src="src/R.js?v=7"></script>
 <script type="text/javascript" src="src/Utils.js"></script>
-<script type="text/javascript" src="src/fishjoy.js?v=6"></script>
+<script type="text/javascript" src="src/fishjoy.js?v=7"></script>
 <script type="text/javascript" src="src/FishManager.js"></script>
 <script type="text/javascript" src="src/FishGroup.js"></script>
 <script type="text/javascript" src="src/views/Fish.js"></script>
@@ -58,21 +58,36 @@ html,body{position:fixed;inset:0;width:100vw;height:100dvh;min-height:100vh;over
 #fitTip{display:none!important;}
 canvas{max-width:none!important;max-height:none!important;}
 </style>
-<script id="githubPagesMobilePatchScript">
+
+<script id="githubPagesFitV7">
 (function(){
   function fitGame(){
-    var designW=980, designH=545;
-    var vw=window.innerWidth || document.documentElement.clientWidth || screen.width;
-    var vh=window.innerHeight || document.documentElement.clientHeight || screen.height;
-    var scale=Math.min(vw/designW, vh/designH);
-    var middle=document.getElementById('middle');
-    if(middle){middle.style.transform='scale('+scale+')';}
+    var designW = 980, designH = 545;
+    var vw = window.innerWidth || document.documentElement.clientWidth || screen.width;
+    var vh = window.innerHeight || document.documentElement.clientHeight || screen.height;
+    var middle = document.getElementById('middle');
+    var outer = document.getElementById('outer');
+    if(!middle) return;
+    middle.style.position = 'absolute';
+    middle.style.left = '50%';
+    middle.style.top = '50%';
+    middle.style.width = designW + 'px';
+    middle.style.height = designH + 'px';
+    middle.style.transformOrigin = 'center center';
+    if(outer){ outer.style.position='fixed'; outer.style.inset='0'; outer.style.overflow='hidden'; outer.style.background='#000'; }
+    if(vh > vw){
+      var s = Math.min(vw / designH, vh / designW);
+      middle.style.transform = 'translate(-50%, -50%) rotate(90deg) scale(' + s + ')';
+    }else{
+      var s2 = Math.min(vw / designW, vh / designH);
+      middle.style.transform = 'translate(-50%, -50%) scale(' + s2 + ')';
+    }
   }
-  function wake(){setTimeout(fitGame,0);setTimeout(fitGame,300);setTimeout(fitGame,1000);}
-  window.addEventListener('resize',wake,{passive:true});
-  window.addEventListener('orientationchange',wake,{passive:true});
-  window.addEventListener('load',wake,{passive:true});
-  document.addEventListener('touchmove',function(e){e.preventDefault();},{passive:false});
+  function wake(){ setTimeout(fitGame,0); setTimeout(fitGame,250); setTimeout(fitGame,1000); }
+  window.addEventListener('resize', wake, {passive:true});
+  window.addEventListener('orientationchange', wake, {passive:true});
+  window.addEventListener('load', wake, {passive:true});
+  document.addEventListener('touchmove', function(e){ e.preventDefault(); }, {passive:false});
 })();
 </script>
 </head>
@@ -88,6 +103,7 @@ canvas{max-width:none!important;max-height:none!important;}
 <div id="fitTip" style="display:none">fit</div>
 </body>
 </html>
+
 
 
 
