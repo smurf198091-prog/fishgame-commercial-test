@@ -24,10 +24,10 @@ html, body { width:100%; height:100%; padding:0; margin:0; overflow:hidden; back
 
 <title>Game Bắn Cá - Full View</title>
 
-<script type="text/javascript" src="js/quark.base-1.0.0.alpha.min.js?v=7"></script>
-<script type="text/javascript" src="src/R.js?v=7"></script>
+<script type="text/javascript" src="js/quark.base-1.0.0.alpha.min.js?v=9"></script>
+<script type="text/javascript" src="src/R.js?v=9"></script>
 <script type="text/javascript" src="src/Utils.js"></script>
-<script type="text/javascript" src="src/fishjoy.js?v=8"></script>
+<script type="text/javascript" src="src/fishjoy.js?v=9"></script>
 <script type="text/javascript" src="src/FishManager.js"></script>
 <script type="text/javascript" src="src/FishGroup.js"></script>
 <script type="text/javascript" src="src/views/Fish.js"></script>
@@ -59,35 +59,60 @@ html,body{position:fixed;inset:0;width:100vw;height:100dvh;min-height:100vh;over
 canvas{max-width:none!important;max-height:none!important;}
 </style>
 
-<script id="githubPagesFitV7">
+
+<style id="orientationSwitchV9Style">
+html,body{position:fixed;inset:0;width:100vw;height:100dvh;min-height:100vh;margin:0;overflow:hidden;background:#000;touch-action:none;}
+#outer{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;min-height:100vh!important;overflow:hidden!important;background:#000!important;}
+#middle{position:absolute!important;left:50%!important;top:50%!important;width:980px!important;height:545px!important;transform-origin:center center!important;}
+#container{position:relative!important;width:980px!important;height:545px!important;overflow:hidden!important;background:#000!important;}
+#fps{display:none!important;}
+#fitTip{display:none!important;}
+#rotateBtn{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:999999;border:0;border-radius:999px;background:rgba(255,214,107,.92);color:#151515;font:bold 14px system-ui;padding:10px 14px;box-shadow:0 4px 18px rgba(0,0,0,.35)}
+</style>
+<script id="orientationSwitchV9">
 (function(){
+  var DESIGN_W=980, DESIGN_H=545;
+  function getMode(){
+    var q = new URLSearchParams(location.search);
+    var m = q.get('orient') || localStorage.getItem('fishgame-orient') || 'auto';
+    return /^(auto|landscape|portrait)$/.test(m) ? m : 'auto';
+  }
+  function setMode(m){ localStorage.setItem('fishgame-orient', m); fitGame(); }
+  function actualMode(){
+    var m=getMode();
+    if(m==='auto') return window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
+    return m;
+  }
   function fitGame(){
-    var designW = 980, designH = 545;
-    var vw = window.innerWidth || document.documentElement.clientWidth || screen.width;
-    var vh = window.innerHeight || document.documentElement.clientHeight || screen.height;
-    var middle = document.getElementById('middle');
-    var outer = document.getElementById('outer');
+    var vw=window.innerWidth||document.documentElement.clientWidth||screen.width;
+    var vh=window.innerHeight||document.documentElement.clientHeight||screen.height;
+    var middle=document.getElementById('middle');
+    var btn=document.getElementById('rotateBtn');
     if(!middle) return;
-    middle.style.position = 'absolute';
-    middle.style.left = '50%';
-    middle.style.top = '50%';
-    middle.style.width = designW + 'px';
-    middle.style.height = designH + 'px';
-    middle.style.transformOrigin = 'center center';
-    if(outer){ outer.style.position='fixed'; outer.style.inset='0'; outer.style.overflow='hidden'; outer.style.background='#000'; }
-    if(vh > vw){
-      var s = Math.min(vw / designH, vh / designW);
-      middle.style.transform = 'translate(-50%, -50%) rotate(90deg) scale(' + s + ')';
+    middle.style.width=DESIGN_W+'px'; middle.style.height=DESIGN_H+'px';
+    var mode=actualMode();
+    if(mode==='portrait'){
+      var s=Math.min(vw/DESIGN_H, vh/DESIGN_W);
+      middle.style.transform='translate(-50%, -50%) rotate(90deg) scale('+s+')';
+      if(btn) btn.textContent='切横屏';
     }else{
-      var s2 = Math.min(vw / designW, vh / designH);
-      middle.style.transform = 'translate(-50%, -50%) scale(' + s2 + ')';
+      var s2=Math.min(vw/DESIGN_W, vh/DESIGN_H);
+      middle.style.transform='translate(-50%, -50%) scale('+s2+')';
+      if(btn) btn.textContent='切竖屏';
     }
   }
+  function installButton(){
+    if(document.getElementById('rotateBtn')) return;
+    var b=document.createElement('button');
+    b.id='rotateBtn'; b.type='button';
+    b.onclick=function(){ setMode(actualMode()==='portrait' ? 'landscape' : 'portrait'); };
+    document.body.appendChild(b); fitGame();
+  }
   function wake(){ setTimeout(fitGame,0); setTimeout(fitGame,250); setTimeout(fitGame,1000); }
-  window.addEventListener('resize', wake, {passive:true});
-  window.addEventListener('orientationchange', wake, {passive:true});
-  window.addEventListener('load', wake, {passive:true});
-  document.addEventListener('touchmove', function(e){ e.preventDefault(); }, {passive:false});
+  window.addEventListener('resize',wake,{passive:true});
+  window.addEventListener('orientationchange',wake,{passive:true});
+  window.addEventListener('load',function(){installButton(); wake();},{passive:true});
+  document.addEventListener('touchmove',function(e){ if(e.target && e.target.id!=='rotateBtn') e.preventDefault(); },{passive:false});
 })();
 </script>
 </head>
@@ -103,6 +128,7 @@ canvas{max-width:none!important;max-height:none!important;}
 <div id="fitTip" style="display:none">fit</div>
 </body>
 </html>
+
 
 
 
